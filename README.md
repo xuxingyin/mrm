@@ -1,6 +1,6 @@
-# mrm
+# 一个查看企业经营数据的移动APP
 
-> A Vue.js project
+>with vue2.0 vue-router 
 
 ## Build Setup
 
