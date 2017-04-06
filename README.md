@@ -1,6 +1,6 @@
 # 一个查看企业经营数据的移动APP
 
->with vue2.0 vue-router 
+>with vue2.0 vue-router vuex mint-ui  
 
 ## Build Setup
 
