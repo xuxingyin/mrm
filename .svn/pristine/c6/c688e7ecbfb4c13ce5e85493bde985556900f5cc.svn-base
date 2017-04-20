@@ -1,0 +1,22 @@
+<template>
+	<box title="品牌规划" >
+			品牌规则内容区域
+	</box>
+</template>
+
+<script>
+import box from 'components/follow/box/box'
+
+export default {
+	data() {
+		return {
+		}
+	},
+	components: {
+		box
+	}
+}
+</script>
+
+<style lang='stylus' scoped>
+</style>

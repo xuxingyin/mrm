@@ -1,15 +1,15 @@
 <template>
-	<div class="mainpage">
+	<div class="mainpage" ref='mainpage'>
+		<headerbar :opacity = 'opacity' :active='activehead'></headerbar>
 		<swiper :options="swiperOption" ref="mySwiper">
 			<!-- 幻灯内容 -->
 			<swiper-slide v-for="(city,index) in followCitys" :key="city.id">
 				<div class="container">
-					<headerbar :city=city :swiperIndex=index :activeSwiperIndex=activeSwiperIndex></headerbar>
 					<todayreal :city=city :swiperIndex=index :activeSwiperIndex=activeSwiperIndex></todayreal>
-					<salesurvey></salesurvey>
-					<customers></customers>
-					<sgp></sgp>
-					<brandplan></brandplan>
+					<salesurvey :city=city :swiperIndex=index :activeSwiperIndex=activeSwiperIndex></salesurvey>
+					<customers :city=city :swiperIndex=index :activeSwiperIndex=activeSwiperIndex></customers>
+					<sgp :city=city :swiperIndex=index :activeSwiperIndex=activeSwiperIndex></sgp>
+					<brandplan :city=city :swiperIndex=index :activeSwiperIndex=activeSwiperIndex></brandplan>
 				</div>
 			</swiper-slide>
 			<!-- ... -->
@@ -27,7 +27,7 @@
 	import customers from 'components/follow/customers/customers'
 	import sgp from 'components/follow/sgp-distribution/sgp'
 	import brandplan from 'components/follow/brandplan/brandplan'
-	
+
 	//https://github.com/surmon-china/vue-awesome-swiper
 	import VueAwesomeSwiper from 'vue-awesome-swiper'
 	Vue.use(VueAwesomeSwiper);
@@ -43,7 +43,10 @@
 							index: swiper.activeIndex
 						});
 					}
-				}
+				},
+				opacity: 1,
+				activehead: false,
+				headHei: 0
 			}
 		},
 		computed: {
@@ -68,11 +71,30 @@
 			sgp,
 			brandplan
 	    },
-		mounted: function(){
-		    this.swiper.slideTo(this.activeSwiperIndex, 0, false);
+	    methods: {
+	    	onScroll() {
+	    		/**
+	    		 * 基数高度和滚动高度
+	    		 */
+	    		let h = 158,
+	    			t = document.body.scrollTop
+	    		if( t === 0){
+	    			this.opacity = 1
+	    			this.activehead = false
+	    		}else{
+	    			this.opacity = (document.body.scrollTop/h).toFixed(1)
+	    			this.activehead = this.opacity>=0.1? true : false
+	    		}
+	    	}
+	    },
+		mounted() {
+			let vm = this , timer;
+		    vm.swiper.slideTo(this.activeSwiperIndex, 0, false)
+		    /**
+		     * 监听鼠标滚动事件
+		     */
+		    window.addEventListener('scroll', this.onScroll)
 		}
-	    
-	   
 	}
 </script>
 
@@ -83,8 +105,8 @@
 		.container
 			padding-top 50px
 			height 100%
-	
+
 		.swiper-pagination
 			position fixed
-			bottom 100px 
+			bottom 60px
 </style>

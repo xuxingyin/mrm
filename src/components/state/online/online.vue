@@ -2,94 +2,77 @@
 	<div class='online'>
 			<mt-header fixed title="平台上线情况">
 				<router-link to="/state" slot="left">
-				    <mt-button icon="back"></mt-button>
+				    <mt-button icon="back">返回</mt-button>
 				</router-link>
 			</mt-header>
 			<div class='content'>
-				<mt-navbar v-model="selected">
-					<mt-tab-item id="online-table">表格</mt-tab-item>
-					<mt-tab-item id="online-chart">图形</mt-tab-item>
-				</mt-navbar>
-				<mt-tab-container v-model="selected">
-					<mt-tab-container-item id="online-table">
-					    <div class="table_header">
-					        <div class="cell1">省份</div>
-					        <div class="cell2">地市公司个数</div>
-					        <div class="cell3">上线运行个数</div>
-					    </div>
-					    <div class="divider"></div>
-					    <div class="table_row" v-bind:class="index%2==0?'odd_row':''" v-for="(item,index) in tableData" :key='item.city'>
-					        <div class="cell1"><span>{{item.city}}</span></div>
-					        <div class="cell2"><span>{{item.no1}}</span></div>
-					        <div class="cell3"><span>{{item.no2}}</span></div>
-					    </div>
-					</mt-tab-container-item>
-					<mt-tab-container-item id="online-chart">
-					    <div style="width: 100%;height: 10px;"></div>
-					    <div class="shape_item"  v-for="(item,index) in tableData" :key='item.city'>
-					        <div class="bar_left">{{item.city}}</div>
-					        <div class="bar_right">{{item.no2}}/{{item.no1}}</div>
-					        <div class="bar">
-					            <div class="progress_bg"></div>
-					            <div class="progress" v-bind:style="{width: item.percent+'%'}"></div>
-					        </div>    
-					    </div>
-					</mt-tab-container-item>
-				</mt-tab-container>
+				<el-table :data="tableData" stripe style="width: 100%" :default-sort = "{prop: 'no1', order: 'descending'}">
+				    <el-table-column prop="city" width="85px" sortable label="省份"></el-table-column>
+				    <el-table-column prop="no1" sortable label="地市公司个数"></el-table-column>
+				    <el-table-column prop="no2" sortable label="上线运行个数"></el-table-column>
+				</el-table>
 			</div>
 	</div>
 </template>
 
 <script>
-	export default {
-		data() {
-			return{
-				selected: "online-table",
-				tableData: this.getTableData()
-			}
-		},
-		methods: {
-			getTableData: function(){
-				var arr = [{'city':'北京','no1':1,'no2':1},
-		        {'city':'天津','no1':1,'no2':1},
-		        {'city':'河北','no1':11,'no2':11},
-		        {'city':'陕西','no1':11,'no2':1},
-		        {'city':'内蒙古','no1':14,'no2':1},
-		        {'city':'辽宁','no1':13,'no2':1},
-		        {'city':'大连','no1':1,'no2':1},
-		        {'city':'吉林','no1':9,'no2':1},
-		        {'city':'黑龙江','no1':21,'no2':21},
-		        {'city':'江苏','no1':14,'no2':1},
-		        {'city':'浙江','no1':11,'no2':0},
-		        {'city':'安徽','no1':16,'no2':1},
-		        {'city':'福建','no1':9,'no2':2},
-		        {'city':'江西','no1':1,'no2':1},
-		        {'city':'山东','no1':1,'no2':1},
-		        {'city':'河南','no1':1,'no2':1},
-		        {'city':'湖北','no1':1,'no2':1},
-		        {'city':'湖南','no1':1,'no2':1}];
-			    var toDecimal = function(x) {
-			        var f = parseFloat(x);
-			        if (isNaN(f)) {
-			            return;
-			        }
-			        f = Math.round(x*10)/10;
-			        return f;
-			    }
-			    for(var i=0; i<arr.length; i++){
-			        var percent = toDecimal(arr[i].no2*100/arr[i].no1);
-			        arr[i].percent = percent;
-			    }
-			    return arr
-			}
+import {Table, TableColumn} from 'element-ui'
+export default {
+	data() {
+		return{
+			selected: "online-table",
+			tableData: this.getTableData()
 		}
+	},
+	methods: {
+		getTableData: function(){
+			var arr = [{'city':'北京','no1':1,'no2':1},
+	        {'city':'天津','no1':1,'no2':1},
+	        {'city':'河北','no1':11,'no2':11},
+	        {'city':'陕西','no1':11,'no2':1},
+	        {'city':'内蒙古','no1':14,'no2':1},
+	        {'city':'辽宁','no1':13,'no2':1},
+	        {'city':'大连','no1':1,'no2':1},
+	        {'city':'吉林','no1':9,'no2':1},
+	        {'city':'黑龙江','no1':21,'no2':21},
+	        {'city':'江苏','no1':14,'no2':1},
+	        {'city':'浙江','no1':11,'no2':0},
+	        {'city':'安徽','no1':16,'no2':1},
+	        {'city':'福建','no1':9,'no2':2},
+	        {'city':'江西','no1':1,'no2':1},
+	        {'city':'山东','no1':1,'no2':1},
+	        {'city':'河南','no1':1,'no2':1},
+	        {'city':'湖北','no1':1,'no2':1},
+	        {'city':'湖南','no1':1,'no2':1}];
+		    var toDecimal = function(x) {
+		        var f = parseFloat(x);
+		        if (isNaN(f)) {
+		            return;
+		        }
+		        f = Math.round(x*10)/10;
+		        return f;
+		    }
+		    for(var i=0; i<arr.length; i++){
+		        var percent = toDecimal(arr[i].no2*100/arr[i].no1);
+		        arr[i].percent = percent;
+		    }
+		    return arr
+		}
+	},
+	components: {
+		'el-table': Table,
+		'el-table-column': TableColumn
 	}
+}
 </script>
 
 <style lang='stylus'>
-.online .content{
-	margin-top: 40px
-}			
+.online{
+	padding-top: 40px;
+}		
+.online > .content > .mint-tab-container{
+	margin-top: 3px;
+}
 .divider{
     width: 100%;
     height: 1px;

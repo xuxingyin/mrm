@@ -1,72 +1,57 @@
 <template>
-<div class='keycity'>
-  <mt-header fixed title="重点城市销售情况">
-    <router-link to="/state" slot="left">
-      <mt-button icon="back"></mt-button>
-    </router-link>
-  </mt-header>
-  <div class='content'>
-    <mt-navbar v-model="selected">
-      <mt-tab-item id="year-count">年累</mt-tab-item>
-      <mt-tab-item id="month-count">月累</mt-tab-item>
-    </mt-navbar>
-    <mt-tab-container v-model="selected">
-      <mt-tab-container-item id="year-count">
-        <div class="table_header">
-          <div class="cell1">城市</div>
-          <div class="cell2">1-10月销量(万箱)</div>
-          <div class="cell3">增幅</div>
-        </div>
-        <div class="divider"></div>
-        <div class="table_row" v-bind:class="index%2==0?'odd_row':''" v-for="(item,index) in tableData" :key='item.city'>
-          <div class="cell1"><span>{{item.city}}</span></div>
-          <div class="cell2"><span>{{item.no1}}</span></div>
-          <div class="cell3"><span>{{item.no2}}</span></div>
-        </div>
-      </mt-tab-container-item>
-      <mt-tab-container-item id="month-count">
-        <div class="table_header">
-          <div class="cell1">城市</div>
-          <div class="cell2">1-10月销量(万箱)</div>
-          <div class="cell3">增幅</div>
-        </div>
-        <div class="divider"></div>
-        <div class="table_row" v-bind:class="index%2==0?'odd_row':''" v-for="(item,index) in tableData" :key='item.city'>
-          <div class="cell1"><span>{{item.city}}</span></div>
-          <div class="cell2"><span>{{item.no1}}</span></div>
-          <div class="cell3"><span>{{item.no2}}</span></div>
-        </div>
-      </mt-tab-container-item>
-    </mt-tab-container>
-  </div>
-</div>
+	<div class='keycity'>
+		<mt-header fixed title="重点城市">
+			<router-link to="/state" slot="left">
+			    <mt-button icon="back">返回</mt-button>
+			</router-link>
+		</mt-header>
+		<div class='content'>
+			<tablebox title="年度销售情况" unit="单位：万箱">
+				<el-table :data="tableData" stripe style="width: 100%" :default-sort = "{prop: 'no2', order: 'descending'}">
+				    <el-table-column prop="city" width="100px" sortable label="城市"></el-table-column>
+				    <el-table-column prop="no1" sortable label="1-10月销量"></el-table-column>
+				    <el-table-column prop="no2" sortable label="增幅"></el-table-column>
+				</el-table>
+			</tablebox>
+		</div>
+	</div>
 </template>
 
 <script>
+import tablebox from 'components/follow/box/table-box'
+import {Table, TableColumn} from 'element-ui'
 import axios from 'axios'
 export default {
-  data() {
-    return {
-      selected: 'year-count',
-      tableData: []
-    }
-  },
-  methods: {
-    testLay: function() {
-      console.log(12121212);
-    }
-  },
-  created() {
-    axios.get('static/keycity.json').then((res) => {
-      console.log(res)
-      this.tableData = res.data
-    })
-  }
+	data() {
+		return {
+			selected: 'year-count',
+			tableData: []
+		}
+	},
+	methods: {
+		testLay: function(){
+			console.log(12121212);
+		}
+	},
+	created() {
+		axios.get('static/keycity.json').then((res) => {
+			console.log(res)
+			this.tableData = res.data
+		})
+	},
+	components: {
+		'el-table': Table,
+		'el-table-column': TableColumn,
+		tablebox
+	}
 }
 </script>
 
 <style lang='stylus'>
 	.keycity
-		.content
-			margin-top: 40px
+		padding-top: 40px
+		>.content 
+			>.mint-tab-container
+				margin-top: 3px
+			
 </style>

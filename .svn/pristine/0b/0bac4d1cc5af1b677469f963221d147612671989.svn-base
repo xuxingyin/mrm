@@ -1,0 +1,130 @@
+<template>
+	<div class="suvery-box">
+		<div class='suvery-count'>{{stock.count | commaSepNumber}}<span>箱</span></div>
+		<div class='suvery-more' :class='stock.state'>
+			<div class='change-count'>
+				{{stock.change | commaSepNumber}}箱
+				<i class='fa fa-long-arrow-down'></i>
+			</div>
+			<div class='change-rate'>
+				{{stock.rate}}
+				<i class='fa fa-long-arrow-down'></i>
+			</div>
+		</div>
+		<div class='saleCountChart' ref="suveryStockChart">		
+		</div>
+	</div>
+</template>
+<script>
+import axios from 'axios'
+import echarts from 'echarts'
+export default {
+	data() {
+		return{
+			stock: {
+				count: '63521',
+				change: '1526',
+				rate: '7.80%',
+				state: 'up'
+			}
+		}
+	},
+	mounted() {
+		this.initChart();
+	},
+	methods: {
+		initChart() {
+			let myChart = echarts.init(this.$refs.suveryStockChart);
+			myChart.setOption(this.getChartOption());
+		},
+		getChartOption() {
+					var dataObj = this.getChartData();
+					
+					var option = {
+						tooltip: {
+							show: false
+						},
+						grid: {
+							left: '0px',
+							right: '22px',
+							containLabel: true,
+							bottom: '10px',
+							top: '30px'
+						},
+						xAxis: {
+							axisLine: { //横坐标线是否显示
+								show: false
+							},
+							axisTick: {
+								show: false
+							},
+							type: 'category',
+							nameTextStyle: {
+								fontSize: '1rem',
+								fontFamily: 'inhert',
+								color: '#abbae1'
+							},
+							boundaryGap: false,
+							data: dataObj.month
+						},
+						yAxis: {
+							show: false,
+							min: 0
+						},
+						lineStyle: {
+							normal: {
+								color: '#ff9966',
+								shadowColor: '#ff9966',
+								width: 4
+							}
+						},
+						textStyle: {
+							color: '#999999'
+						},
+						series: [{
+							name: '邮件营销',
+							type: 'line',
+							stack: '总量',
+							label: {
+								normal: {
+									show: true,
+									offset: [0, -5]
+								}
+							},
+							lineStyle: {
+								color: '#ff9966'
+							},
+							symbolSize: 10,
+							color: '#ff9966',
+							itemStyle: {
+								normal: {
+									borderColor: '#ff9966'
+								}
+							},
+							data: dataObj.data
+						}]
+					}
+				
+				return option;
+		},
+		getChartData() {
+				var random = function (min,max) {
+				    return Math.floor(Math.random()*(max-min+1)+min);
+				};
+				var month = ['10月','11月','12月','1月','2月'];
+				var data = [];
+				for(var i=0;i<12;i++){
+					data.push(random(1,10));
+				}
+				
+				return {
+					month:month,
+					data:data
+				}
+		}
+	}
+}
+</script>
+<style>
+	
+</style>

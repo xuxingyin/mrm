@@ -1,6 +1,6 @@
 body,html
+ font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
  font-size: 14px
- height 100%
 .clearfix
   display: inline-block;
   &:after
@@ -10,3 +10,13 @@ body,html
     line-height: 0
     clear: both;
     visibility: hidden
+.mint-header.is-fixed
+  z-index 100 !important
+.mint-indicator
+  position relative
+  z-index 1000
+.el-table
+  th>.cell
+    white-space:nowrap
+.mint-tabbar.is-fixed
+  z-index 999 !important

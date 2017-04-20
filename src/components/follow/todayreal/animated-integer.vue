@@ -5,7 +5,7 @@
 <script>
 	import Vue from 'vue'
 	import TWEEN from 'tween.js'
-	
+
 	export default {
 		props: {
 			value: {
@@ -24,7 +24,8 @@
 			}
 		},
 		mounted: function() {
-			this.tween(0, this.value)
+			let vm = this;
+			vm.tween(0, this.value)
 		},
 		methods: {
 			tween: function(startValue, endValue) {

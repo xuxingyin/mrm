@@ -1,5 +1,5 @@
 <template>
-	<div class='headerbar'>
+	<div class='headerbar' :class="{active: active}" ref='headdom'>
 		<span class="name">
 			<span class="gps" v-if="swiperIndex == 0">
 				当前位置
@@ -16,17 +16,20 @@
 
 <script>
 	export default {
-		props: {
-			city: Object,
-			swiperIndex: Number,
-			activeSwiperIndex:Number
+		props: ['opacity','active'],
+		computed: {
+			city(){
+				return this.$store.state.follow.followCitys[this.swiperIndex]
+			},
+		    swiperIndex () {
+		        return this.$store.state.follow.activeSwiperIndex
+		    }
 		},
-		data: function () {
-		  return { 
-		  	
-		  }
+		watch: {
+    		opacity: function(newValue, oldValue) {
+	    		this.$refs.headdom.style.opacity = newValue
+    		}
 		}
-		
 	}
 </script>
 
@@ -40,6 +43,7 @@
 	color #333333
 	text-align center
 	position fixed
+	z-index 999999
 	top 0
 	.gps
 		color #26a2ff
@@ -49,11 +53,18 @@
 		line-height 50px
 	.edit
 		.fa-bars
-			color #ffffff
 			font-size 22px
 			float right
 			margin-right 14px
 			margin-top 14px
 			color #26a2ff
+	&.active
+		background-color: #00a2f6
+		color: #fff
+		.gps
+			color #fff
+		.edit
+			.fa-bars
+				color: #fff
 
 </style>

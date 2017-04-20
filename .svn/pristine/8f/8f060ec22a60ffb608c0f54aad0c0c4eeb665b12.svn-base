@@ -1,0 +1,97 @@
+<template>
+	<box class='salesurvey' title="销售概况" more="查看全国情况">
+		<div class='tabnav'>
+			<a @click="tabToggle(tab.saletab1)" 
+				class='nav first' 
+				:class="{isActive: this.currentView==='saletab1'}">销量</a>
+            <a @click="tabToggle(tab.saletab2)" 
+            	class='nav'
+            	:class="{isActive: this.currentView==='saletab2'}">单箱值</a>
+            <a @click="tabToggle(tab.saletab3)" 
+            	class='nav last' 
+            	:class="{isActive: this.currentView==='saletab3'}"">库存</a>
+        </div>
+        <div class="tabcontent">
+            <component :is='currentView' keep-alive></component>
+        </div>
+	</box>
+</template>
+<script>
+import box from 'components/follow/box/box'
+import saletab1 from './saletab1/saletab1.vue'
+import saletab2 from './saletab2/saletab2.vue'
+import saletab3 from './saletab3/saletab3.vue'
+
+
+export default {
+	data() {
+		return {
+			selected: 'saletab1',
+			currentView: 'saletab1',
+			tab: {
+				saletab1: 'saletab1',
+				saletab2: 'saletab2',
+				saletab3: 'saletab3'
+			}
+		}
+	},
+	components: {
+		box,
+		saletab1,
+		saletab2,
+		saletab3
+	},
+	methods: {
+		tabToggle:function(tabText,event){
+            this.currentView = tabText
+            this.selected = tabText
+        }
+	}
+}
+</script>
+<style lang='stylus'>
+@import '../../../common/stylus/config'
+.salesurvey
+	.tabnav
+		display: flex
+		justify-content: center
+		.nav
+			padding: 10px 20px
+			border: 1px solid high-color
+			background-color: #fff
+			color: high-color
+			&.first
+				border-right:0px
+				border-radius: 8px 0px 0px 8px
+			&.last
+				border-left:0px
+				border-radius: 0px 8px 8px 0px
+			&.isActive
+				background-color: high-color
+				color: #fff
+	.tabcontent
+		.suvery-box
+			margin-top: 15px
+			text-align: center
+			.suvery-count
+				flex 1
+				padding: 10px
+				font-size: 1.5rem
+				span
+					font-size: 1rem
+					color: ignore-font-color
+			.suvery-more
+				display: flex
+				justify-content: center
+				&.up
+					color: #33cc99
+				&.down
+					color: #ff6666
+				.change-rate
+					padding: 0px 10px
+				.change-count
+					padding: 0px 10px
+			.saleCountChart
+				height: 200px
+				width: 100%
+</style>

@@ -1,0 +1,114 @@
+<template>
+	<box title="货源投放">
+		<div class='cell title'>
+			<div class='left-box'>
+				规格
+			</div>
+			<div class='right-box'>
+				订货集中度
+			</div>
+		</div>
+		<div v-for="item in data" class='cell'>
+			<div class='left-box'>
+				{{item.name}}
+			</div>
+			<div class='right-box'>
+				<span class='value'>{{item.rate}}</span>
+				<span class='state' :class="{high: item.state === '1'}">偏高</span> 
+				<i class='fa fa-angle-right'></i>
+			</div>
+		</div>
+		<div class='footer' v-on:click="goAll">
+			查看全部
+		</div>
+	</box>
+</template>
+
+<script>
+import box from 'components/follow/box/box'
+import axios from 'axios'
+
+export default {
+	data() {
+		return {
+			title: {
+				name: '货源投放'
+			},
+			data:[]
+		}
+	},
+	components: {
+		box
+	},
+	created() {
+		this.data = this.getData()
+	},
+	methods: {
+		getData() {
+			return [{
+					"name": "中华（软）",
+					"rate": "68%",
+					"state": "1"
+				},
+				{
+					"name": "中华（硬）",
+					"rate": "89%",
+					"state": "1"
+				},
+				{
+					"name": "人民大会堂（硬）",
+					"rate": "73%",
+					"state": "1"
+				},
+				{
+					"name": "中南海（硬）",
+					"rate": "56%",
+					"state": "0"
+				},
+				{
+					"name": "苏烟（软）",
+					"rate": "54%",
+					"state": "0"
+				}]
+		},
+		goAll() {
+			alert('查看全部')
+		}
+	}
+}
+</script>
+
+<style lang='stylus' scoped>
+@import '../../../common/stylus/config'
+@import '../../../common/stylus/mixin'
+.cell
+	padding: 1.1rem
+	display: flex
+	align-items: center
+	border-1px(#e6e6e6)
+	&.title
+		color: ignore-font-color
+		margin-top: -1.1rem
+	.left-box
+		flex: 1
+	.right-box
+		display: flex
+		*
+			display: inline-block
+			padding: 0.2rem	
+			margin-left: 0.2rem
+		.value
+			flex: 1	
+		.state
+			background-color: #cccccc
+			border-radius: 4px
+			color: #fff
+			&.high
+				background-color: #f47761
+		i
+			color: ignore-font-color
+.footer
+	text-align: center
+	padding: 1.5rem
+	color: import-font-color
+</style>

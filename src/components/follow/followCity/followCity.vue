@@ -13,7 +13,7 @@
 				<i class="fa fa-bars animate-fadeInRight" v-if="editFlag == true"></i>
 			</mt-cell>
 		</div>
-		<div class="addNewCity" v-on:click="citySelectPopupVisible = true">
+		<div class="addNewCity" v-on:click="citySelectPopupVisible = true" ref="addNewCityBtn">
 			<i class="fa fa-plus-circle"></i>
 		</div>
 		<mt-popup v-model="citySelectPopupVisible" position="bottom" class="citySelectPopup" :modal=true>
@@ -29,73 +29,79 @@
 <script>
 import axios from 'axios'
 
-let newCity ="";
+let newCity = "";
 
 export default {
-	methods: {
-		onValuesChange(picker, values) {
-			picker.setSlotValues(1, this.cityData[values[0]]);
-			newCity = values[1];
-		},
-		routerBack() {
-			this.$router.go(-1);
-		},
-		onCitySelect(index){
-			this.$router.push({
-				path: '/follow'
-			})
-			this.$store.commit('setActiveSwiperIndex', {
-				index: index
-			});
+  methods: {
+    onValuesChange(picker, values) {
+      picker.setSlotValues(1, this.cityData[values[0]]);
+      newCity = values[1];
+    },
+    routerBack() {
+      this.$router.go(-1);
+    },
+    onCitySelect(index) {
+      this.$router.push({
+        path: '/follow'
+      })
+      this.$store.commit('setActiveSwiperIndex', {
+        index: index
+      });
 
-		},
-		pickerSelectConfirm() {
-			this.citySelectPopupVisible = false;
-			this.$router.push({
-				path: '/follow'
-			})
-			this.$store.commit('addNewCity', {
-				name: newCity
-			});
-			this.$store.commit('setActiveSwiperIndex', {
-				index: this.$store.state.follow.followCitys.length - 1
-			});
+    },
+    pickerSelectConfirm() {
+      this.citySelectPopupVisible = false;
+      this.$router.push({
+        path: '/follow'
+      })
+      this.$store.commit('addNewCity', {
+        name: newCity
+      });
+      this.$store.commit('setActiveSwiperIndex', {
+        index: this.$store.state.follow.followCitys.length - 1
+      });
 
-		}
-	},
-	data: function() {
-		var provinceData = ["北京", "广东", "上海", "天津", "重庆", "辽宁", "江苏", "湖北", "四川", "陕西", "河北", "山西", "河南", "吉林", "黑龙江", "内蒙古", "山东", "安徽", "浙江", "福建", "湖南", "广西", "江西", "贵州", "云南", "西藏", "海南", "甘肃", "宁夏", "青海", "新疆"];
-		return {
-			editFlag: false,
-			citySelectPopupVisible: false,
-			cityData: {},
-			cityPickerSlot: [{
-				flex: 1,
-				values: provinceData,
-				className: 'slot1',
-				textAlign: 'center'
-			}, {
-				divider: true,
-				content: '-',
-				className: 'slot2'
-			}, {
-				flex: 1,
-				values: ["北京"],
-				className: 'slot3',
-				textAlign: 'center'
-			}]
-		}
-	},
-	computed: {
-		followCitys() {
-			return this.$store.state.follow.followCitys
-		}
-	},
-	created() {
-		axios.get('static/city.json').then((res) => {
-			this.cityData = res.data
-		})
-	}
+    }
+  },
+  data: function() {
+    var provinceData = ["北京", "广东", "上海", "天津", "重庆", "辽宁", "江苏", "湖北", "四川", "陕西", "河北", "山西", "河南", "吉林", "黑龙江", "内蒙古", "山东", "安徽", "浙江", "福建", "湖南", "广西", "江西", "贵州", "云南", "西藏", "海南", "甘肃", "宁夏", "青海", "新疆"];
+    return {
+      editFlag: false,
+      citySelectPopupVisible: false,
+      cityData: {},
+      cityPickerSlot: [{
+        flex: 1,
+        values: provinceData,
+        className: 'slot1',
+        textAlign: 'center'
+      }, {
+        divider: true,
+        content: '-',
+        className: 'slot2'
+      }, {
+        flex: 1,
+        values: ["北京"],
+        className: 'slot3',
+        textAlign: 'center'
+      }]
+    }
+  },
+  computed: {
+    followCitys() {
+      return this.$store.state.follow.followCitys
+    }
+  },
+  created() {
+    axios.get('static/city.json').then((res) => {
+      this.cityData = res.data
+    })
+  },
+  mounted: function() {
+		var vm = this;
+		setTimeout(function(){
+			vm.$refs.addNewCityBtn.className += ' animate-fadeInLeft';
+		},500)
+  }
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus">
@@ -118,15 +124,18 @@ export default {
 		animation: fadeInRight 0.4s;
 
 	.addNewCity
+		visibility:hidden
 		.fa-plus-circle
 			font-size 40px
 			color #26a2ff
+		&.animate-fadeInLeft
+			visibility:visible
 			position fixed
 			bottom 100px
 			right 30px
+			animation: bounceInUp 1s;
 	.citySelectPopup
 		width 100%
-
 	.picker-toolbar
 		border-bottom 1px solid #eaeaea
 		.picker-action
